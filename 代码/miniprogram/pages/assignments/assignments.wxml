@@ -1,0 +1,121 @@
+<view class="container">
+  <!-- 标签页切换 -->
+  <view class="tabs">
+    <view
+      class="tab-item {{currentTab === 0 ? 'active' : ''}}"
+      data-tab="0"
+      bindtap="switchTab"
+    >
+      全部作业
+    </view>
+    <view
+      class="tab-item {{currentTab === 1 ? 'active' : ''}}"
+      data-tab="1"
+      bindtap="switchTab"
+    >
+      待完成
+    </view>
+  </view>
+
+  <!-- 全部作业列表 -->
+  <view class="tab-content" wx:if="{{currentTab === 0}}">
+    <view class="empty" wx:if="{{assignments.length === 0 && !loading}}">
+      <text class="empty-icon">📋</text>
+      <text class="empty-text">暂无作业</text>
+    </view>
+
+    <view class="assignment-list">
+      <view
+        class="assignment-item"
+        wx:for="{{assignments}}"
+        wx:key="assignment_id"
+        bindtap="viewAssignment"
+        data-id="{{item.assignment_id}}"
+      >
+        <view class="assignment-header">
+          <text class="assignment-title">{{item.title}}</text>
+          <view class="assignment-badge">{{item.assignment_title}}</view>
+        </view>
+
+        <view class="assignment-info">
+          <text class="info-item">
+            <text class="info-icon">📚</text>
+            {{item.course_name}}
+          </text>
+          <text class="info-item">
+            <text class="info-icon">👨‍🏫</text>
+            {{item.teacher_name}}
+          </text>
+        </view>
+
+        <view class="assignment-meta">
+          <text class="meta-item">
+            <text class="meta-icon">⏰</text>
+            截止：{{formatDate(item.due_date)}}
+          </text>
+          <text class="meta-item">
+            <text class="meta-icon">📊</text>
+            总分：{{item.total_score}}分
+          </text>
+        </view>
+
+        <view class="assignment-status" wx:if="{{item.submission_id}}">
+          <text class="status-text submitted">已提交</text>
+          <text class="status-date">{{formatDate(item.submission_date)}}</text>
+        </view>
+
+        <view class="assignment-score" wx:if="{{item.score}}">
+          <text class="score-label">得分：</text>
+          <text class="score-value">{{item.score}}</text>
+          <text class="score-total">/ {{item.total_score}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 待完成作业列表 -->
+  <view class="tab-content" wx:if="{{currentTab === 1}}">
+    <view class="empty" wx:if="{{pendingAssignments.length === 0 && !loading}}">
+      <text class="empty-icon">✅</text>
+      <text class="empty-text">太棒了！没有待完成的作业</text>
+    </view>
+
+    <view class="assignment-list">
+      <view
+        class="assignment-item pending"
+        wx:for="{{pendingAssignments}}"
+        wx:key="assignment_id"
+        bindtap="submitAssignment"
+        data-id="{{item.assignment_id}}"
+      >
+        <view class="assignment-header">
+          <text class="assignment-title">{{item.title}}</text>
+          <view class="assignment-badge urgent">待完成</view>
+        </view>
+
+        <view class="assignment-info">
+          <text class="info-item">
+            <text class="info-icon">📚</text>
+            {{item.course_name}}
+          </text>
+          <text class="info-item">
+            <text class="info-icon">👨‍🏫</text>
+            {{item.teacher_name}}
+          </text>
+        </view>
+
+        <view class="assignment-deadline">
+          <text class="deadline-icon">⏰</text>
+          <text class="deadline-text">截止时间：{{formatDate(item.due_date)}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 加载状态 -->
+  <view class="loading" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+</view>
+
+<wxs module="wxs" src="../../wxs/format.wxs"></wxs>

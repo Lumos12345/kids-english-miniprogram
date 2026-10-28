@@ -1,0 +1,39 @@
+var formatDate = function(date) {
+  if (!date) return '';
+
+  var d = getDate(date);
+  var year = d.getFullYear();
+  var month = padZero(d.getMonth() + 1);
+  var day = padZero(d.getDate());
+
+  return year + '-' + month + '-' + day;
+};
+
+var formatDateTime = function(date) {
+  if (!date) return '';
+
+  var d = getDate(date);
+  var year = d.getFullYear();
+  var month = padZero(d.getMonth() + 1);
+  var day = padZero(d.getDate());
+  var hour = padZero(d.getHours());
+  var minute = padZero(d.getMinutes());
+
+  return year + '-' + month + '-' + day + ' ' + hour + ':' + minute;
+};
+
+var padZero = function(num) {
+  return num < 10 ? '0' + num : num;
+};
+
+var formatPrice = function(price) {
+  if (price === null || price === undefined) return '免费';
+  if (price === 0) return '免费';
+  return '¥' + price.toFixed(2);
+};
+
+module.exports = {
+  formatDate: formatDate,
+  formatDateTime: formatDateTime,
+  formatPrice: formatPrice
+};

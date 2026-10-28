@@ -1,0 +1,201 @@
+<!-- pages/scores/scores.wxml -->
+<view class="container">
+  <!-- 成绩总览 -->
+  <view class="score-overview">
+    <view class="overview-card">
+      <view class="overview-header">
+        <text class="overview-title">成绩总览</text>
+        <view class="overview-period" bindtap="showPeriodPicker">
+          <text>{{currentPeriod}}</text>
+          <text class="dropdown-icon">▼</text>
+        </view>
+      </view>
+      
+      <view class="overview-stats">
+        <view class="stat-circle">
+          <view class="circle-chart">
+            <text class="average-score">{{overviewData.avg_score}}</text>
+            <text class="score-label">平均分</text>
+          </view>
+        </view>
+        
+        <view class="stat-details">
+          <view class="detail-item">
+            <text class="detail-value">{{overviewData.total_tests}}</text>
+            <text class="detail-label">考试次数</text>
+          </view>
+          <view class="detail-item">
+            <text class="detail-value">{{overviewData.highest_score}}</text>
+            <text class="detail-label">最高分</text>
+          </view>
+          <view class="detail-item">
+            <text class="detail-value">{{overviewData.pass_rate}}%</text>
+            <text class="detail-label">及格率</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 成绩趋势 -->
+  <view class="trend-section">
+    <view class="section-header">
+      <text class="section-title">成绩趋势</text>
+      <view class="trend-tabs">
+        <view class="trend-tab {{trendType === 'score' ? 'active' : ''}}" 
+              bindtap="switchTrend" data-type="score">
+          <text>分数</text>
+        </view>
+        <view class="trend-tab {{trendType === 'progress' ? 'active' : ''}}" 
+              bindtap="switchTrend" data-type="progress">
+          <text>进度</text>
+        </view>
+      </view>
+    </view>
+    
+    <view class="trend-chart">
+      <canvas canvas-id="trendChart" class="chart-canvas"></canvas>
+    </view>
+  </view>
+
+  <!-- 课程成绩 -->
+  <view class="course-scores-section">
+    <view class="section-header">
+      <text class="section-title">课程成绩</text>
+      <text class="section-more" bindtap="navigateToAllCourses">查看全部 ></text>
+    </view>
+    
+    <view class="course-scores-list">
+      <view class="course-score-item" 
+            wx:for="{{courseScores}}" 
+            wx:key="course_id"
+            bindtap="navigateToCourseScores" 
+            data-id="{{item.course_id}}">
+        <view class="course-score-icon">
+          <text>{{item.course_name.charAt(0)}}</text>
+        </view>
+        
+        <view class="course-score-info">
+          <text class="course-score-name">{{item.course_name}}</text>
+          <text class="course-score-stats">{{item.test_count}}次测试 · 平均{{item.avg_score}}分</text>
+        </view>
+        
+        <view class="course-score-value">
+          <text class="score-number">{{item.avg_score}}</text>
+          <text class="score-trend {{item.trend >= 0 ? 'up' : 'down'}}">
+            {{item.trend >= 0 ? '↑' : '↓'}} {{Math.abs(item.trend)}}%
+          </text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 最近成绩 -->
+  <view class="recent-scores-section">
+    <view class="section-header">
+      <text class="section-title">最近成绩</text>
+    </view>
+    
+    <view class="recent-scores-list">
+      <view class="recent-score-item" 
+            wx:for="{{recentScores}}" 
+            wx:key="score_id"
+            bindtap="navigateToScoreDetail" 
+            data-id="{{item.score_id}}">
+        <view class="recent-score-date">
+          <text class="date-day">{{item.day}}</text>
+          <text class="date-month">{{item.month}}</text>
+        </view>
+        
+        <view class="recent-score-content">
+          <text class="recent-score-title">{{item.title}}</text>
+          <text class="recent-score-course">{{item.course_name}}</text>
+          <view class="recent-score-meta">
+            <text class="meta-item">{{item.type_text}}</text>
+            <text class="meta-item">{{item.test_time}}</text>
+          </view>
+        </view>
+        
+        <view class="recent-score-result">
+          <text class="result-score {{item.passed ? 'pass' : 'fail'}}">
+            {{item.score}}
+          </text>
+          <text class="result-total">/{{item.total_score}}</text>
+          <view class="result-status {{item.passed ? 'pass' : 'fail'}}">
+            {{item.passed ? '及格' : '不及格'}}
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 成绩分析 -->
+  <view class="analysis-section">
+    <view class="section-header">
+      <text class="section-title">成绩分析</text>
+    </view>
+    
+    <view class="analysis-cards">
+      <view class="analysis-card">
+        <view class="analysis-icon">📊</view>
+        <view class="analysis-info">
+          <text class="analysis-title">强项分析</text>
+          <text class="analysis-desc">{{analysis.strength}}</text>
+        </view>
+      </view>
+      
+      <view class="analysis-card">
+        <view class="analysis-icon">🎯</view>
+        <view class="analysis-info">
+          <text class="analysis-title">弱项提醒</text>
+          <text class="analysis-desc">{{analysis.weakness}}</text>
+        </view>
+      </view>
+      
+      <view class="analysis-card">
+        <view class="analysis-icon">📈</view>
+        <view class="analysis-info">
+          <text class="analysis-title">进步空间</text>
+          <text class="analysis-desc">{{analysis.suggestion}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 排行榜 -->
+  <view class="leaderboard-section">
+    <view class="section-header">
+      <text class="section-title">学习排行榜</text>
+      <text class="section-more" bindtap="navigateToLeaderboard">查看全部 ></text>
+    </view>
+    
+    <view class="leaderboard-list">
+      <view class="leaderboard-item" 
+            wx:for="{{leaderboard}}" 
+            wx:key="user_id"
+            wx:if="{{index < 5}}">
+        <view class="rank rank-{{index + 1}}">
+          <text>{{index + 1}}</text>
+        </view>
+        
+        <image class="user-avatar" src="{{item.avatar}}" mode="aspectFill"></image>
+        
+        <view class="user-info">
+          <text class="user-name">{{item.real_name}}</text>
+          <text class="user-stats">{{item.total_hours}}h · {{item.completed_lessons}}课时</text>
+        </view>
+        
+        <view class="user-score">
+          <text class="score-value">{{item.avg_score}}</text>
+          <text class="score-label">分</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
+
+<!-- 时期选择器 -->
+<picker mode="selector" range="{{periods}}" range-key="label" 
+        bindchange="onPeriodChange" wx:if="{{false}}">
+  <view></view>
+</picker>

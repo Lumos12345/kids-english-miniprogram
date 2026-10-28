@@ -1,0 +1,111 @@
+<view class="container">
+  <!-- 搜索栏 -->
+  <view class="search-bar">
+    <input
+      class="search-input"
+      placeholder="搜索学习资源..."
+      value="{{searchKeyword}}"
+      bindinput="onSearchInput"
+      bindconfirm="onSearch"
+    />
+    <button class="search-btn" bindtap="onSearch">搜索</button>
+  </view>
+
+  <!-- 分类选择 -->
+  <view class="category-scroll">
+    <scroll-view class="category-list" scroll-x="true" show-scrollbar="false">
+      <view
+        class="category-item {{currentCategory === null ? 'active' : ''}}"
+        bindtap="selectCategory"
+        data-id=""
+      >
+        <text class="category-icon">📦</text>
+        <text class="category-name">全部</text>
+      </view>
+      <view
+        class="category-item {{currentCategory === item.id ? 'active' : ''}}"
+        wx:for="{{categories}}"
+        wx:key="id"
+        bindtap="selectCategory"
+        data-id="{{item.id}}"
+      >
+        <text class="category-icon">{{item.icon}}</text>
+        <text class="category-name">{{item.name}}</text>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 资源列表 -->
+  <view class="resources-container">
+    <view class="empty" wx:if="{{resources.length === 0 && !loading}}">
+      <text class="empty-icon">🔍</text>
+      <text class="empty-text">暂无相关资源</text>
+    </view>
+
+    <view class="resource-list">
+      <view
+        class="resource-item"
+        wx:for="{{resources}}"
+        wx:key="id"
+      >
+        <image class="resource-cover" src="{{item.cover}}" mode="aspectFill" />
+
+        <view class="resource-info">
+          <text class="resource-title">{{item.title}}</text>
+          <text class="resource-description">{{item.description}}</text>
+
+          <view class="resource-meta">
+            <text class="meta-item">
+              <text class="meta-icon">📁</text>
+              {{item.category}}
+            </text>
+            <text class="meta-item">
+              <text class="meta-icon">💾</text>
+              {{item.fileSize}}
+            </text>
+          </view>
+
+          <view class="resource-stats">
+            <text class="stat-item">
+              <text class="stat-icon">⬇️</text>
+              {{item.downloadCount}}
+            </text>
+            <text class="stat-item">
+              <text class="stat-icon">📅</text>
+              {{item.uploadTime}}
+            </text>
+          </view>
+
+          <view class="resource-actions">
+            <button
+              class="action-btn preview-btn"
+              bindtap="previewResource"
+              data-id="{{item.id}}"
+            >
+              预览
+            </button>
+            <button
+              class="action-btn download-btn"
+              bindtap="downloadResource"
+              data-id="{{item.id}}"
+            >
+              下载
+            </button>
+            <button
+              class="action-btn share-btn"
+              open-type="share"
+              data-id="{{item.id}}"
+            >
+              分享
+            </button>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 加载状态 -->
+  <view class="loading" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+</view>

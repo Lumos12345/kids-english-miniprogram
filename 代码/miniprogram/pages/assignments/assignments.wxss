@@ -1,0 +1,225 @@
+.container {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+/* 标签页切换 */
+.tabs {
+  display: flex;
+  background-color: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.tab-item {
+  flex: 1;
+  text-align: center;
+  padding: 30rpx 0;
+  font-size: 28rpx;
+  color: #666;
+  position: relative;
+}
+
+.tab-item.active {
+  color: #4A90E2;
+  font-weight: bold;
+}
+
+.tab-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60rpx;
+  height: 6rpx;
+  background-color: #4A90E2;
+  border-radius: 3rpx;
+}
+
+/* 标签页内容 */
+.tab-content {
+  padding: 20rpx;
+}
+
+/* 空状态 */
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 200rpx 0;
+}
+
+.empty-icon {
+  font-size: 120rpx;
+  margin-bottom: 20rpx;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: #999;
+}
+
+/* 作业列表 */
+.assignment-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.assignment-item {
+  background-color: #fff;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.05);
+  margin-bottom: 20rpx;
+}
+
+.assignment-item.pending {
+  border-left: 6rpx solid #FF6B6B;
+}
+
+/* 作业头部 */
+.assignment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.assignment-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  flex: 1;
+}
+
+.assignment-badge {
+  padding: 8rpx 20rpx;
+  background-color: #4A90E2;
+  color: #fff;
+  border-radius: 20rpx;
+  font-size: 24rpx;
+}
+
+.assignment-badge.urgent {
+  background-color: #FF6B6B;
+}
+
+/* 作业信息 */
+.assignment-info {
+  display: flex;
+  gap: 30rpx;
+  margin-bottom: 20rpx;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  font-size: 26rpx;
+  color: #666;
+}
+
+.info-icon {
+  margin-right: 8rpx;
+  font-size: 28rpx;
+}
+
+/* 作业元信息 */
+.assignment-meta {
+  display: flex;
+  gap: 30rpx;
+  margin-bottom: 20rpx;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  font-size: 26rpx;
+  color: #999;
+}
+
+.meta-icon {
+  margin-right: 8rpx;
+  font-size: 28rpx;
+}
+
+/* 作业状态 */
+.assignment-status {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 20rpx;
+  border-top: 1rpx solid #f0f0f0;
+}
+
+.status-text {
+  font-size: 26rpx;
+  color: #4CAF50;
+}
+
+.status-text.submitted {
+  color: #4CAF50;
+}
+
+.status-date {
+  font-size: 24rpx;
+  color: #999;
+}
+
+/* 作业分数 */
+.assignment-score {
+  display: flex;
+  align-items: baseline;
+  padding-top: 20rpx;
+  border-top: 1rpx solid #f0f0f0;
+}
+
+.score-label {
+  font-size: 26rpx;
+  color: #666;
+}
+
+.score-value {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #4A90E2;
+  margin: 0 8rpx;
+}
+
+.score-total {
+  font-size: 28rpx;
+  color: #999;
+}
+
+/* 作业截止时间 */
+.assignment-deadline {
+  display: flex;
+  align-items: center;
+  padding: 20rpx 0;
+  border-top: 1rpx dashed #ddd;
+}
+
+.deadline-icon {
+  margin-right: 8rpx;
+  font-size: 28rpx;
+}
+
+.deadline-text {
+  font-size: 26rpx;
+  color: #FF6B6B;
+  font-weight: 500;
+}
+
+/* 加载状态 */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40rpx;
+  color: #999;
+  font-size: 28rpx;
+}

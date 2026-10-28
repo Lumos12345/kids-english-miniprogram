@@ -1,0 +1,194 @@
+<!-- pages/study/study.wxml -->
+<view class="container">
+  <!-- 学习统计卡片 -->
+  <view class="stats-card">
+    <view class="stats-header">
+      <text class="stats-title">我的学习</text>
+      <text class="stats-period">本周</text>
+    </view>
+    
+    <view class="stats-grid">
+      <view class="stat-item">
+        <text class="stat-value">{{studyStats.totalHours}}</text>
+        <text class="stat-label">学习时长(h)</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-value">{{studyStats.completedLessons}}</text>
+        <text class="stat-label">完成课时</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-value">{{studyStats.learnedWords}}</text>
+        <text class="stat-label">掌握词汇</text>
+      </view>
+    </view>
+    
+    <view class="progress-section">
+      <view class="progress-header">
+        <text class="progress-label">学习进度</text>
+        <text class="progress-value">{{studyStats.progress}}%</text>
+      </view>
+      <view class="progress-bar">
+        <view class="progress-fill" style="width: {{studyStats.progress}}%"></view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 继续学习 -->
+  <view class="continue-section" wx:if="{{currentCourse}}">
+    <view class="section-header">
+      <text class="section-title">继续学习</text>
+      <text class="section-more" bindtap="navigateToCourseDetail" data-id="{{currentCourse.course_id}}">查看详情 ></text>
+    </view>
+    
+    <view class="continue-card" bindtap="continueLearning" data-id="{{currentCourse.lesson_id}}">
+      <image class="continue-cover" src="{{currentCourse.cover_image}}" mode="aspectFill"></image>
+      <view class="continue-info">
+        <text class="continue-title">{{currentCourse.course_name}}</text>
+        <text class="continue-lesson">{{currentChapter.chapter_name}} - {{currentLesson.lesson_name}}</text>
+        
+        <view class="continue-progress">
+          <view class="progress-bar-small">
+            <view class="progress-fill-small" style="width: {{currentProgress}}%"></view>
+          </view>
+          <text class="progress-text-small">{{currentProgress}}%</text>
+        </view>
+      </view>
+      
+      <view class="continue-btn">
+        <text class="btn-icon">▶️</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 我的课程 -->
+  <view class="my-courses-section">
+    <view class="section-header">
+      <text class="section-title">我的课程</text>
+      <text class="section-more" bindtap="navigateToAllCourses">全部 ></text>
+    </view>
+    
+    <scroll-view class="course-scroll" scroll-x>
+      <view class="course-scroll-list">
+        <view class="mini-course-card" 
+              wx:for="{{myCourses}}" 
+              wx:key="course_id"
+              bindtap="navigateToCourseDetail" 
+              data-id="{{item.course_id}}">
+          <image class="mini-course-cover" src="{{item.cover_image}}" mode="aspectFill"></image>
+          <view class="mini-course-info">
+            <text class="mini-course-name">{{item.course_name}}</text>
+            <view class="mini-course-progress">
+              <text>进度: {{item.completion_rate}}%</text>
+            </view>
+          </view>
+        </view>
+        
+        <view class="mini-course-card add-course" bindtap="navigateToCourses">
+          <view class="add-course-icon">+</view>
+          <text class="add-course-text">添加课程</text>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 待完成作业 -->
+  <view class="assignments-section" wx:if="{{pendingAssignments.length > 0}}">
+    <view class="section-header">
+      <text class="section-title">待完成作业</text>
+      <text class="section-more" bindtap="navigateToAssignments">全部 ({{pendingAssignments.length}}) ></text>
+    </view>
+    
+    <view class="assignment-list">
+      <view class="assignment-item" 
+            wx:for="{{pendingAssignments}}" 
+            wx:key="assignment_id"
+            bindtap="navigateToAssignmentDetail" 
+            data-id="{{item.assignment_id}}">
+        <view class="assignment-icon">📝</view>
+        <view class="assignment-info">
+          <text class="assignment-title">{{item.title}}</text>
+          <text class="assignment-course">{{item.course_name}}</text>
+          <view class="assignment-deadline">
+            <text class="deadline-icon">⏰</text>
+            <text class="deadline-text">{{item.deadline_text}}</text>
+          </view>
+        </view>
+        <view class="assignment-urgent" wx:if="{{item.is_urgent}}">
+          <text class="urgent-text">急</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 词汇复习 -->
+  <view class="vocab-section">
+    <view class="section-header">
+      <text class="section-title">词汇复习</text>
+      <text class="section-more" bindtap="navigateToVocab">全部 ></text>
+    </view>
+    
+    <view class="vocab-cards">
+      <view class="vocab-card" bindtap="startVocabReview" data-type="due">
+        <view class="vocab-icon">📚</view>
+        <view class="vocab-info">
+          <text class="vocab-count">{{vocabStats.due_count}}</text>
+          <text class="vocab-label">待复习</text>
+        </view>
+      </view>
+      
+      <view class="vocab-card" bindtap="startVocabReview" data-type="new">
+        <view class="vocab-icon">🆕</view>
+        <view class="vocab-info">
+          <text class="vocab-count">{{vocabStats.new_count}}</text>
+          <text class="vocab-label">新词学习</text>
+        </view>
+      </view>
+      
+      <view class="vocab-card" bindtap="startVocabReview" data-type="mastered">
+        <view class="vocab-icon">⭐</view>
+        <view class="vocab-info">
+          <text class="vocab-count">{{vocabStats.mastered_count}}</text>
+          <text class="vocab-label">已掌握</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 学习计划 -->
+  <view class="plan-section" wx:if="{{studyPlan}}">
+    <view class="section-header">
+      <text class="section-title">学习计划</text>
+      <text class="section-more" bindtap="navigateToPlan">详情 ></text>
+    </view>
+    
+    <view class="plan-card">
+      <view class="plan-header">
+        <text class="plan-name">{{studyPlan.plan_name}}</text>
+        <view class="plan-status {{studyPlan.status}}">{{studyPlan.status_text}}</view>
+      </view>
+      
+      <text class="plan-desc">{{studyPlan.description}}</text>
+      
+      <view class="plan-stats">
+        <view class="plan-stat-item">
+          <text class="plan-stat-label">每日目标</text>
+          <text class="plan-stat-value">{{studyPlan.daily_time}}分钟</text>
+        </view>
+        <view class="plan-stat-item">
+          <text class="plan-stat-label">已完成</text>
+          <text class="plan-stat-value">{{studyPlan.progress}}%</text>
+        </view>
+        <view class="plan-stat-item">
+          <text class="plan-stat-label">剩余天数</text>
+          <text class="plan-stat-value">{{studyPlan.days_left}}天</text>
+        </view>
+      </view>
+      
+      <view class="plan-progress">
+        <view class="progress-bar">
+          <view class="progress-fill" style="width: {{studyPlan.progress}}%"></view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

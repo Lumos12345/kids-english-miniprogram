@@ -1,0 +1,117 @@
+<!-- pages/index/index.wxml -->
+<view class="container">
+  <!-- 用户信息头部 -->
+  <view class="header">
+    <view class="user-info">
+      <image 
+        class="avatar" 
+        src="{{userInfo.avatar || ''}}" 
+        mode="aspectFill"
+        binderror="onAvatarError"
+        bindtap="navigateToLogin"
+      ></image>
+      <view class="user-details" bindtap="navigateToLogin">
+        <text class="username">{{userInfo ? (userInfo.real_name || userInfo.username) : '未登录'}}</text>
+        <text class="user-type">{{userInfo ? userTypeText : '点击登录'}}</text>
+      </view>
+    </view>
+    <button class="btn-mini" bindtap="navigateToLogin">
+      {{userInfo ? '切换' : '登录'}}
+    </button>
+  </view>
+
+  <!-- 学习进度卡片 -->
+  <view class="card">
+    <view class="card-header">
+      <text class="card-title">学习进度</text>
+    </view>
+    <view class="stats-grid">
+      <view class="stat-item">
+        <text class="stat-value">{{stats.total_study_time || 0}}</text>
+        <text class="stat-label">学习时长(分钟)</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-value">{{stats.completed_lessons || 0}}</text>
+        <text class="stat-label">完成课程</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-value">{{stats.learned_words || 0}}</text>
+        <text class="stat-label">学习单词</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-value">{{stats.current_streak || 0}}</text>
+        <text class="stat-label">连续学习(天)</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 推荐课程 -->
+  <view class="card">
+    <view class="card-header">
+      <text class="card-title">推荐课程</text>
+      <text class="more-link" bindtap="navigateToCourses">更多 ></text>
+    </view>
+    <view class="courses-scroll">
+      <scroll-view class="courses-list" scroll-x="true" show-scrollbar="false">
+        <view 
+          class="course-item" 
+          wx:for="{{recommendedCourses}}" 
+          wx:key="course_id"
+          bindtap="navigateToCourseDetail"
+          data-id="{{item.course_id}}"
+        >
+          <view class="course-cover">
+            <text class="course-cover-text">{{item.course_name.substring(0, 2)}}</text>
+          </view>
+          <view class="course-info">
+            <text class="course-title">{{item.course_name}}</text>
+            <view class="course-meta">
+              <text class="meta-item">⭐ {{item.rating}}</text>
+              <text class="meta-item">👥 {{item.enroll_count}}</text>
+            </view>
+            <text class="course-price">¥{{item.price}}</text>
+          </view>
+        </view>
+        
+        <view class="empty" wx:if="{{recommendedCourses.length === 0}}">
+          <text class="empty-text">暂无推荐课程</text>
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+
+  <!-- 快捷入口 -->
+  <view class="quick-actions">
+    <view class="action-item" bindtap="navigateToAssignments">
+      <text class="action-icon">📝</text>
+      <text class="action-label">作业</text>
+    </view>
+    <view class="action-item" bindtap="navigateToScores">
+      <text class="action-icon">🏆</text>
+      <text class="action-label">成绩</text>
+    </view>
+    <view class="action-item" bindtap="navigateToResources">
+      <text class="action-icon">📚</text>
+      <text class="action-label">资源</text>
+    </view>
+    <view class="action-item" bindtap="navigateToStudy">
+      <text class="action-icon">📖</text>
+      <text class="action-label">学习</text>
+    </view>
+  </view>
+
+  <!-- 学习提醒 -->
+  <view class="notification" wx:if="{{showReminder}}">
+    <text class="notification-icon">💡</text>
+    <text class="notification-text">今天还没有完成学习任务，加油！</text>
+    <text class="notification-close" bindtap="dismissReminder">×</text>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{!userInfo}}">
+    <text class="empty-icon">👋</text>
+    <text class="empty-text">欢迎来到少儿英语辅导</text>
+    <text class="empty-subtext">登录后开始学习吧</text>
+    <button class="empty-btn" bindtap="navigateToLogin">立即登录</button>
+  </view>
+</view>
