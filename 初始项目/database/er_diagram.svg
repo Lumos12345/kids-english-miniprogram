@@ -1,0 +1,369 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 1600" width="1400" height="1600" style="background:#f8f9fa;font-family:Arial,sans-serif">
+  <defs>
+    <marker id="arrow1" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#555"/></marker>
+    <marker id="arrowN" markerWidth="12" markerHeight="8" refX="12" refY="4" orient="auto"><text x="0" y="6" font-size="10" fill="#e74c3c" font-weight="bold">N</text><polygon points="2 0, 12 4, 2 8" fill="#e74c3c"/></marker>
+    <marker id="arrow1r" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto-start-reverse"><polygon points="10 0, 0 3.5, 10 7" fill="#555"/></marker>
+  </defs>
+  
+  <style>
+    .title { font-size:24px; font-weight:bold; fill:#2c3e50; }
+    .entity { fill:#e8f4fd; stroke:#3498db; stroke-width:2; rx:8; }
+    .entity-title { fill:#2980b9; font-size:13px; font-weight:bold; }
+    .attr-row { font-size:11px; fill:#555; }
+    .pk { font-size:11px; fill:#2c3e50; font-weight:bold; }
+    .fk { font-size:11px; fill:#e67e22; }
+    .rel-line { stroke:#555; stroke-width:1.5; fill:none; }
+    .rel-label { font-size:10px; fill:#888; font-style:italic; }
+    .rel-one { font-size:11px; fill:#555; font-weight:bold; }
+    .rel-many { font-size:11px; fill:#e74c3c; font-weight:bold; }
+    .label-bg { fill:white; stroke:#ddd; stroke-width:1; rx:4; }
+  </style>
+
+  <text x="700" y="40" text-anchor="middle" class="title">少儿英语辅导系统 — 数据库 E-R 图</text>
+
+  <!-- ===== USERS ===== -->
+  <g transform="translate(50,70)">
+    <rect class="entity" width="220" height="200"/>
+    <rect x="0" y="0" width="220" height="26" fill="#3498db" rx="8"/>
+    <rect x="0" y="14" width="220" height="12" fill="#3498db"/>
+    <text x="110" y="18" text-anchor="middle" fill="white" font-size="14" font-weight="bold">users</text>
+    <text x="10" y="42" class="pk">🔑 user_id (PK)</text>
+    <text x="10" y="58" class="attr-row">username (UNIQUE)</text>
+    <text x="10" y="74" class="attr-row">password</text>
+    <text x="10" y="90" class="attr-row">phone (UNIQUE)</text>
+    <text x="10" y="106" class="attr-row">email (UNIQUE)</text>
+    <text x="10" y="122" class="attr-row">real_name</text>
+    <text x="10" y="138" class="attr-row">gender / birth_date</text>
+    <text x="10" y="154" class="fk">🔗 user_type (enum)</text>
+    <text x="10" y="170" class="attr-row">status / last_login_time</text>
+    <text x="10" y="186" class="attr-row">created_at / updated_at</text>
+  </g>
+
+  <!-- ===== TEACHERS ===== -->
+  <g transform="translate(350,70)">
+    <rect class="entity" width="200" height="170"/>
+    <rect x="0" y="0" width="200" height="26" fill="#3498db" rx="8"/>
+    <rect x="0" y="14" width="200" height="12" fill="#3498db"/>
+    <text x="100" y="18" text-anchor="middle" fill="white" font-size="14" font-weight="bold">teachers</text>
+    <text x="10" y="42" class="pk">🔑 teacher_id (PK)</text>
+    <text x="10" y="58" class="fk">🔗 user_id (FK → users)</text>
+    <text x="10" y="74" class="attr-row">qualification</text>
+    <text x="10" y="90" class="attr-row">experience_years</text>
+    <text x="10" y="106" class="attr-row">specialization</text>
+    <text x="10" y="122" class="attr-row">bio</text>
+    <text x="10" y="138" class="attr-row">rating</text>
+    <text x="10" y="154" class="attr-row">total_students</text>
+  </g>
+
+  <!-- user ──1:1── teacher -->
+  <line x1="270" y1="120" x2="350" y2="120" class="rel-line"/>
+  <text x="290" y="110" class="rel-one">1</text>
+  <text x="330" y="110" class="rel-one">1</text>
+  <text x="295" y="133" class="rel-label">is</text>
+
+  <!-- ===== STUDENTS ===== -->
+  <g transform="translate(50,320)">
+    <rect class="entity" width="210" height="170"/>
+    <rect x="0" y="0" width="210" height="26" fill="#3498db" rx="8"/>
+    <rect x="0" y="14" width="210" height="12" fill="#3498db"/>
+    <text x="105" y="18" text-anchor="middle" fill="white" font-size="14" font-weight="bold">students</text>
+    <text x="10" y="42" class="pk">🔑 student_id (PK)</text>
+    <text x="10" y="58" class="fk">🔗 user_id (FK → users)</text>
+    <text x="10" y="74" class="fk">🔗 parent_id (FK → users)</text>
+    <text x="10" y="90" class="attr-row">grade_level</text>
+    <text x="10" y="106" class="attr-row">school_name</text>
+    <text x="10" y="122" class="attr-row">english_level</text>
+    <text x="10" y="138" class="attr-row">learning_goals</text>
+    <text x="10" y="154" class="attr-row">created_at / updated_at</text>
+  </g>
+
+  <!-- user ──1:1── student -->
+  <line x1="160" y1="270" x2="160" y2="320" class="rel-line"/>
+  <text x="145" y="290" class="rel-one">1</text>
+  <text x="170" y="290" class="rel-one">1</text>
+
+  <!-- ===== PARENTS ===== -->
+  <g transform="translate(330,320)">
+    <rect class="entity" width="190" height="140"/>
+    <rect x="0" y="0" width="190" height="26" fill="#3498db" rx="8"/>
+    <rect x="0" y="14" width="190" height="12" fill="#3498db"/>
+    <text x="95" y="18" text-anchor="middle" fill="white" font-size="14" font-weight="bold">parents</text>
+    <text x="10" y="42" class="pk">🔑 parent_id (PK)</text>
+    <text x="10" y="58" class="fk">🔗 user_id (FK → users)</text>
+    <text x="10" y="74" class="attr-row">occupation</text>
+    <text x="10" y="90" class="attr-row">education</text>
+    <text x="10" y="106" class="attr-row">created_at</text>
+    <text x="10" y="122" class="attr-row">updated_at</text>
+  </g>
+
+  <!-- user ──1:1── parent -->
+  <line x1="260" y1="170" x2="330" y2="350" class="rel-line"/>
+  <text x="270" y="240" class="rel-one">1</text>
+  <text x="300" y="300" class="rel-one">1</text>
+
+  <!-- student N:1 parent -->
+  <line x1="260" y1="380" x2="330" y2="380" class="rel-line"/>
+  <text x="280" y="370" class="rel-many">N</text>
+  <text x="315" y="370" class="rel-one">1</text>
+  <text x="278" y="395" class="rel-label">has</text>
+
+  <!-- ===== CATEGORIES ===== -->
+  <g transform="translate(750,70)">
+    <rect class="entity" width="200" height="120"/>
+    <rect x="0" y="0" width="200" height="26" fill="#3498db" rx="8"/>
+    <rect x="0" y="14" width="200" height="12" fill="#3498db"/>
+    <text x="100" y="18" text-anchor="middle" fill="white" font-size="14" font-weight="bold">categories</text>
+    <text x="10" y="42" class="pk">🔑 category_id (PK)</text>
+    <text x="10" y="58" class="attr-row">category_name</text>
+    <text x="10" y="74" class="attr-row">description</text>
+    <text x="10" y="90" class="attr-row">created_at</text>
+    <text x="10" y="106" class="attr-row">updated_at</text>
+  </g>
+
+  <!-- ===== COURSES ===== -->
+  <g transform="translate(750,240)">
+    <rect class="entity" width="240" height="200"/>
+    <rect x="0" y="0" width="240" height="26" fill="#3498db" rx="8"/>
+    <rect x="0" y="14" width="240" height="12" fill="#3498db"/>
+    <text x="120" y="18" text-anchor="middle" fill="white" font-size="14" font-weight="bold">courses</text>
+    <text x="10" y="42" class="pk">🔑 course_id (PK)</text>
+    <text x="10" y="58" class="attr-row">course_name</text>
+    <text x="10" y="74" class="fk">🔗 category_id (FK → categories)</text>
+    <text x="10" y="90" class="fk">🔗 teacher_id (FK → teachers)</text>
+    <text x="10" y="106" class="attr-row">description / cover_image</text>
+    <text x="10" y="122" class="attr-row">level / target_age</text>
+    <text x="10" y="138" class="attr-row">duration / total_lessons</text>
+    <text x="10" y="154" class="attr-row">price / is_free</text>
+    <text x="10" y="170" class="attr-row">status / view_count</text>
+    <text x="10" y="186" class="attr-row">enroll_count / rating</text>
+  </g>
+
+  <!-- category 1:N course -->
+  <line x1="850" y1="190" x2="850" y2="240" class="rel-line"/>
+  <text x="838" y="210" class="rel-one">1</text>
+  <text x="858" y="210" class="rel-many">N</text>
+  <text x="800" y="225" class="rel-label">contains</text>
+
+  <!-- teacher 1:N course -->
+  <line x1="550" y1="140" x2="750" y2="300" class="rel-line"/>
+  <text x="600" y="200" class="rel-one">1</text>
+  <text x="680" y="250" class="rel-many">N</text>
+  <text x="620" y="240" class="rel-label">teaches</text>
+
+  <!-- ===== LESSONS ===== -->
+  <g transform="translate(1060,240)">
+    <rect class="entity" width="210" height="160"/>
+    <rect x="0" y="0" width="210" height="26" fill="#3498db" rx="8"/>
+    <rect x="0" y="14" width="210" height="12" fill="#3498db"/>
+    <text x="105" y="18" text-anchor="middle" fill="white" font-size="14" font-weight="bold">lessons</text>
+    <text x="10" y="42" class="pk">🔑 lesson_id (PK)</text>
+    <text x="10" y="58" class="fk">🔗 course_id (FK → courses)</text>
+    <text x="10" y="74" class="attr-row">lesson_title</text>
+    <text x="10" y="90" class="attr-row">lesson_description</text>
+    <text x="10" y="106" class="attr-row">video_url / audio_url</text>
+    <text x="10" y="122" class="attr-row">duration</text>
+    <text x="10" y="138" class="attr-row">order_index</text>
+    <text x="10" y="154" class="attr-row">created_at / updated_at</text>
+  </g>
+
+  <!-- course 1:N lesson -->
+  <line x1="990" y1="320" x2="1060" y2="320" class="rel-line"/>
+  <text x="1008" y="310" class="rel-one">1</text>
+  <text x="1038" y="310" class="rel-many">N</text>
+
+  <!-- ===== ENROLLMENTS ===== -->
+  <g transform="translate(50,540)">
+    <rect class="entity" width="240" height="130"/>
+    <rect x="0" y="0" width="240" height="26" fill="#e8daef" stroke="#8e44ad" stroke-width="2" rx="8"/>
+    <rect x="0" y="14" width="240" height="12" fill="#e8daef"/>
+    <text x="120" y="18" text-anchor="middle" fill="#8e44ad" font-size="14" font-weight="bold">enrollments</text>
+    <text x="10" y="42" class="pk">🔑 enrollment_id (PK)</text>
+    <text x="10" y="58" class="fk">🔗 user_id (FK → users)</text>
+    <text x="10" y="74" class="fk">🔗 course_id (FK → courses)</text>
+    <text x="10" y="90" class="attr-row">enrolled_at</text>
+    <text x="10" y="106" class="attr-row">progress</text>
+    <text x="10" y="122" class="fk">🔒 UNIQUE(user_id, course_id)</text>
+  </g>
+
+  <!-- user N:M course via enrollments -->
+  <line x1="160" y1="490" x2="160" y2="540" class="rel-line"/>
+  <text x="140" y="510" class="rel-many">N</text>
+  <line x1="400" y1="440" x2="750" y2="440" class="rel-line"/>
+  <text x="550" y="430" class="rel-many">N</text>
+  <text x="540" y="455" class="rel-label">enrolls</text>
+
+  <!-- ===== STUDY RECORDS ===== -->
+  <g transform="translate(360,540)">
+    <rect class="entity" width="230" height="170"/>
+    <rect x="0" y="0" width="230" height="26" fill="#3498db" rx="8"/>
+    <rect x="0" y="14" width="230" height="12" fill="#3498db"/>
+    <text x="115" y="18" text-anchor="middle" fill="white" font-size="14" font-weight="bold">study_records</text>
+    <text x="10" y="42" class="pk">🔑 record_id (PK)</text>
+    <text x="10" y="58" class="fk">🔗 user_id (FK → users)</text>
+    <text x="10" y="74" class="fk">🔗 lesson_id (FK → lessons)</text>
+    <text x="10" y="90" class="fk">🔗 course_id (FK → courses)</text>
+    <text x="10" y="106" class="attr-row">study_duration</text>
+    <text x="10" y="122" class="attr-row">progress</text>
+    <text x="10" y="138" class="attr-row">is_completed</text>
+    <text x="10" y="154" class="attr-row">last_study_date</text>
+  </g>
+
+  <!-- user 1:N study_record -->
+  <line x1="160" y1="490" x2="450" y2="540" class="rel-line" stroke-dasharray="4,3"/>
+  <text x="250" y="510" class="rel-one">1</text>
+  <text x="370" y="515" class="rel-many">N</text>
+
+  <!-- ===== ASSIGNMENTS ===== -->
+  <g transform="translate(750,500)">
+    <rect class="entity" width="230" height="180"/>
+    <rect x="0" y="0" width="230" height="26" fill="#3498db" rx="8"/>
+    <rect x="0" y="14" width="230" height="12" fill="#3498db"/>
+    <text x="115" y="18" text-anchor="middle" fill="white" font-size="14" font-weight="bold">assignments</text>
+    <text x="10" y="42" class="pk">🔑 assignment_id (PK)</text>
+    <text x="10" y="58" class="fk">🔗 course_id (FK → courses)</text>
+    <text x="10" y="74" class="fk">🔗 lesson_id (FK → lessons)</text>
+    <text x="10" y="90" class="fk">🔗 teacher_id (FK → teachers)</text>
+    <text x="10" y="106" class="attr-row">title / description</text>
+    <text x="10" y="122" class="attr-row">requirements</text>
+    <text x="10" y="138" class="attr-row">due_date / total_score</text>
+    <text x="10" y="154" class="attr-row">status</text>
+    <text x="10" y="170" class="attr-row">created_at / updated_at</text>
+  </g>
+
+  <!-- course 1:N assignment -->
+  <line x1="870" y1="440" x2="870" y2="500" class="rel-line"/>
+  <text x="858" y="465" class="rel-one">1</text>
+  <text x="878" y="465" class="rel-many">N</text>
+
+  <!-- ===== SUBMISSIONS ===== -->
+  <g transform="translate(1040,500)">
+    <rect class="entity" width="230" height="170"/>
+    <rect x="0" y="0" width="230" height="26" fill="#e8daef" stroke="#8e44ad" stroke-width="2" rx="8"/>
+    <rect x="0" y="14" width="230" height="12" fill="#e8daef"/>
+    <text x="115" y="18" text-anchor="middle" fill="#8e44ad" font-size="14" font-weight="bold">submissions</text>
+    <text x="10" y="42" class="pk">🔑 submission_id (PK)</text>
+    <text x="10" y="58" class="fk">🔗 user_id (FK → users)</text>
+    <text x="10" y="74" class="fk">🔗 assignment_id (FK → assignments)</text>
+    <text x="10" y="90" class="attr-row">content / attachments</text>
+    <text x="10" y="106" class="attr-row">submission_date</text>
+    <text x="10" y="122" class="attr-row">is_late / score</text>
+    <text x="10" y="138" class="attr-row">feedback / status</text>
+    <text x="10" y="154" class="attr-row">graded_at</text>
+  </g>
+
+  <!-- assignment 1:N submission -->
+  <line x1="980" y1="590" x2="1040" y2="590" class="rel-line"/>
+  <text x="1000" y="580" class="rel-one">1</text>
+  <text x="1022" y="580" class="rel-many">N</text>
+
+  <!-- ===== SCORES ===== -->
+  <g transform="translate(360,760)">
+    <rect class="entity" width="210" height="170"/>
+    <rect x="0" y="0" width="210" height="26" fill="#3498db" rx="8"/>
+    <rect x="0" y="14" width="210" height="12" fill="#3498db"/>
+    <text x="105" y="18" text-anchor="middle" fill="white" font-size="14" font-weight="bold">scores</text>
+    <text x="10" y="42" class="pk">🔑 score_id (PK)</text>
+    <text x="10" y="58" class="fk">🔗 user_id (FK → users)</text>
+    <text x="10" y="74" class="fk">🔗 course_id (FK → courses)</text>
+    <text x="10" y="90" class="fk">🔗 assignment_id (FK → assignments)</text>
+    <text x="10" y="106" class="attr-row">score / total_score</text>
+    <text x="10" y="122" class="attr-row">percentage</text>
+    <text x="10" y="138" class="attr-row">test_date</text>
+    <text x="10" y="154" class="attr-row">remarks</text>
+  </g>
+
+  <!-- user 1:N score -->
+  <line x1="160" y1="490" x2="400" y2="760" class="rel-line" stroke-dasharray="6,3"/>
+  <text x="240" y="600" class="rel-one">1</text>
+  <text x="330" y="650" class="rel-many">N</text>
+
+  <!-- ===== VOCABULARY ===== -->
+  <g transform="translate(50,760)">
+    <rect class="entity" width="220" height="180"/>
+    <rect x="0" y="0" width="220" height="26" fill="#3498db" rx="8"/>
+    <rect x="0" y="14" width="220" height="12" fill="#3498db"/>
+    <text x="110" y="18" text-anchor="middle" fill="white" font-size="14" font-weight="bold">vocabulary</text>
+    <text x="10" y="42" class="pk">🔑 vocab_id (PK)</text>
+    <text x="10" y="58" class="attr-row">word / phonetic</text>
+    <text x="10" y="74" class="attr-row">part_of_speech</text>
+    <text x="10" y="90" class="attr-row">chinese_meaning</text>
+    <text x="10" y="106" class="attr-row">english_definition</text>
+    <text x="10" y="122" class="attr-row">example_sentence</text>
+    <text x="10" y="138" class="attr-row">audio_url / image_url</text>
+    <text x="10" y="154" class="attr-row">difficulty_level / category</text>
+    <text x="10" y="170" class="attr-row">frequency</text>
+  </g>
+
+  <!-- ===== USER VOCABULARY ===== -->
+  <g transform="translate(50,990)">
+    <rect class="entity" width="240" height="160"/>
+    <rect x="0" y="0" width="240" height="26" fill="#e8daef" stroke="#8e44ad" stroke-width="2" rx="8"/>
+    <rect x="0" y="14" width="240" height="12" fill="#e8daef"/>
+    <text x="120" y="18" text-anchor="middle" fill="#8e44ad" font-size="14" font-weight="bold">user_vocabulary</text>
+    <text x="10" y="42" class="pk">🔑 id (PK)</text>
+    <text x="10" y="58" class="fk">🔗 user_id (FK → users)</text>
+    <text x="10" y="74" class="fk">🔗 vocab_id (FK → vocabulary)</text>
+    <text x="10" y="90" class="attr-row">mastery_level (0-5)</text>
+    <text x="10" y="106" class="attr-row">review_count</text>
+    <text x="10" y="122" class="attr-row">last_review_date</text>
+    <text x="10" y="138" class="attr-row">next_review_date</text>
+    <text x="10" y="154" class="fk">🔒 UNIQUE(user_id, vocab_id)</text>
+  </g>
+
+  <!-- user N:M vocab via user_vocabulary -->
+  <line x1="160" y1="940" x2="160" y2="990" class="rel-line"/>
+  <text x="138" y="960" class="rel-many">N</text>
+  <text x="185" y="920" class="rel-many">N</text>
+  <text x="160" y="980" class="rel-label">learns</text>
+
+  <!-- ===== MESSAGES ===== -->
+  <g transform="translate(380,990)">
+    <rect class="entity" width="210" height="150"/>
+    <rect x="0" y="0" width="210" height="26" fill="#3498db" rx="8"/>
+    <rect x="0" y="14" width="210" height="12" fill="#3498db"/>
+    <text x="105" y="18" text-anchor="middle" fill="white" font-size="14" font-weight="bold">messages</text>
+    <text x="10" y="42" class="pk">🔑 message_id (PK)</text>
+    <text x="10" y="58" class="fk">🔗 user_id (FK → users)</text>
+    <text x="10" y="74" class="attr-row">title</text>
+    <text x="10" y="90" class="attr-row">content</text>
+    <text x="10" y="106" class="attr-row">message_type</text>
+    <text x="10" y="122" class="attr-row">is_read</text>
+    <text x="10" y="138" class="attr-row">created_at</text>
+  </g>
+
+  <!-- user 1:N message -->
+  <line x1="270" y1="170" x2="420" y2="990" class="rel-line" stroke-dasharray="6,3"/>
+  <text x="290" y="550" class="rel-one">1</text>
+  <text x="360" y="800" class="rel-many">N</text>
+
+  <!-- Legend -->
+  <g transform="translate(750,760)">
+    <rect class="label-bg" width="600" height="280"/>
+    <text x="300" y="25" text-anchor="middle" font-size="16" font-weight="bold" fill="#2c3e50">图例</text>
+    
+    <rect x="20" y="40" width="20" height="14" fill="#3498db" rx="3"/>
+    <text x="50" y="53" font-size="12" fill="#555">主要实体表</text>
+    
+    <rect x="180" y="40" width="20" height="14" fill="#e8daef" stroke="#8e44ad" stroke-width="1.5" rx="3"/>
+    <text x="210" y="53" font-size="12" fill="#555">关联/中间表</text>
+
+    <text x="20" y="80" class="pk">🔑 主键 (PRIMARY KEY)</text>
+    <text x="20" y="100" class="fk">🔗 外键 (FOREIGN KEY)</text>
+    
+    <text x="320" y="80" class="rel-one">1 — 一对一关系</text>
+    <text x="320" y="100" class="rel-one">1 — 一对多关系（1 端）</text>
+    <text x="320" y="120" class="rel-many">N — 一对多关系（多端）</text>
+    
+    <line x1="20" y1="155" x2="140" y2="155" class="rel-line"/>
+    <text x="160" y="159" font-size="12" fill="#555">实线 → 直接关系</text>
+    
+    <line x1="20" y1="180" x2="140" y2="180" class="rel-line" stroke-dasharray="6,3"/>
+    <text x="160" y="184" font-size="12" fill="#555">虚线 → 间接/逻辑关系</text>
+
+    <text x="20" y="220" class="attr-row">核心实体关系：</text>
+    <text x="20" y="240" class="attr-row">• User 1:1 Teacher/Student/Parent — 角色扩展</text>
+    <text x="20" y="256" class="attr-row">• User N:M Course (via Enrollments) — 报名</text>
+    <text x="20" y="272" class="attr-row">• Course 1:N Lesson — 课程包含多个课时</text>
+  </g>
+
+</svg>
